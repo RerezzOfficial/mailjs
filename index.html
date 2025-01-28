@@ -6,99 +6,118 @@
     <title>Contact Form</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Resetting default styles */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
-        form {
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        .contact-form-container {
+            background-color: #fff;
+            padding: 30px;
             border-radius: 8px;
-            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .contact-form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
         }
 
         input, textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 14px;
+            outline: none;
         }
 
         input[type="submit"] {
             background-color: #4CAF50;
-            color: white;
+            color: #fff;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
             background-color: #45a049;
         }
 
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
         .alert {
-            color: green;
+            color: #4CAF50;
             font-weight: bold;
+            text-align: center;
             display: none;
+            margin-top: 10px;
         }
 
-        .error {
-            color: red;
-            font-weight: bold;
-            display: none;
+        .alert.error {
+            color: #f44336;
         }
     </style>
 </head>
 <body>
-    <form id="contact-form">
-        <label for="user_name">Name</label>
-        <input type="text" id="user_name" name="user_name" required>
 
-        <label for="user_email">Your Email</label>
-        <input type="email" id="user_email" name="user_email" required>
+    <div class="contact-form-container">
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+            <label for="user_name">Name</label>
+            <input type="text" id="user_name" name="user_name" required>
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" required></textarea>
+            <label for="user_email">Your Email</label>
+            <input type="email" id="user_email" name="user_email" required>
 
-        <input type="submit" value="Send Message">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
 
-        <div class="alert" id="success-message">Your message has been sent successfully!</div>
-        <div class="error" id="error-message">Oops! Something went wrong. Please try again.</div>
-    </form>
+            <input type="submit" value="Send Message">
+            <div class="alert" id="success-message">Your message has been sent successfully!</div>
+            <div class="alert error" id="error-message">Oops! Something went wrong. Please try again.</div>
+        </form>
+    </div>
 
     <script type="text/javascript">
-        // Inisialisasi EmailJS dengan public key Anda
-        emailjs.init("f_WJD6vagy2xmw-b_");  // Ganti dengan Public Key yang benar
+        emailjs.init("f_WJD6vagy2xmw-b_");  // Replace with your public key
 
         window.onload = function() {
             document.getElementById('contact-form').addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                // Mengirim form ke EmailJS dengan Service ID dan Template ID
                 emailjs.sendForm('service_y9m3nxd', 'template_cpj4k8n', this)
                     .then(() => {
-                        document.getElementById('success-message').style.display = 'block'; // Tampilkan pesan sukses
-                        document.getElementById('contact-form').reset(); // Reset form setelah pengiriman
+                        document.getElementById('success-message').style.display = 'block';
+                        document.getElementById('error-message').style.display = 'none';
                     }, (error) => {
-                        console.log(error); // Log kesalahan untuk debugging
-                        document.getElementById('error-message').style.display = 'block'; // Tampilkan pesan kesalahan
+                        document.getElementById('error-message').style.display = 'block';
+                        document.getElementById('success-message').style.display = 'none';
                     });
             });
         }
     </script>
+
 </body>
 </html>
