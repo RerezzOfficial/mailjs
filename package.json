@@ -16,7 +16,7 @@
     "nodemon": "^2.0.7"
   },
   "engines": {
-    "node": "14.x"
+    "node": "22.x" 
   },
   "author": "Your Name",
   "license": "MIT"
