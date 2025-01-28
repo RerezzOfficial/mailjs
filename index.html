@@ -8,124 +8,97 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
-        .container {
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 100%;
-            max-width: 480px;
-            padding: 30px;
-            box-sizing: border-box;
+        form {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 300px;
         }
 
-        h1 {
-            text-align: center;
-            color: #007bff;
-            margin-bottom: 20px;
-            font-size: 26px;
-        }
-
-        label {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        textarea {
+        input, textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 2px solid #ccc;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        textarea {
-            height: 120px;
         }
 
         input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #45a049;
         }
 
-        .footer {
-            text-align: center;
-            font-size: 14px;
-            margin-top: 20px;
-            color: #777;
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
         }
 
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
+        .alert {
+            color: green;
+            font-weight: bold;
+            display: none;
         }
 
-        .footer a:hover {
-            text-decoration: underline;
+        .error {
+            color: red;
+            font-weight: bold;
+            display: none;
         }
     </style>
+</head>
+<body>
+    <form id="contact-form">
+        <label for="user_name">Name</label>
+        <input type="text" id="user_name" name="user_name" required>
+
+        <label for="user_email">Your Email</label>
+        <input type="email" id="user_email" name="user_email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <input type="submit" value="Send Message">
+
+        <div class="alert" id="success-message">Your message has been sent successfully!</div>
+        <div class="error" id="error-message">Oops! Something went wrong. Please try again.</div>
+    </form>
+
     <script type="text/javascript">
-        (function() {
-            // Inisialisasi SDK EmailJS dengan public key
-            emailjs.init("f_WJD6vagy2xmw-b_");  // Ganti dengan kunci publik EmailJS kamu
-        })();
+        // Inisialisasi EmailJS dengan public key Anda
+        emailjs.init("f_WJD6vagy2xmw-b_");  // Ganti dengan Public Key yang benar
 
         window.onload = function() {
             document.getElementById('contact-form').addEventListener('submit', function(event) {
                 event.preventDefault();
-                // Mengirim data form ke EmailJS menggunakan layanan dan template yang sudah dikonfigurasi
+
+                // Mengirim form ke EmailJS dengan Service ID dan Template ID
                 emailjs.sendForm('service_y9m3nxd', 'template_cpj4k8n', this)
                     .then(() => {
-                        alert('Pesan berhasil dikirim!');
+                        document.getElementById('success-message').style.display = 'block'; // Tampilkan pesan sukses
+                        document.getElementById('contact-form').reset(); // Reset form setelah pengiriman
                     }, (error) => {
-                        console.log('Pengiriman Gagal...', error);
-                        alert('Terjadi kesalahan, coba lagi!');
+                        console.log(error); // Log kesalahan untuk debugging
+                        document.getElementById('error-message').style.display = 'block'; // Tampilkan pesan kesalahan
                     });
             });
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Contact Us</h1>
-        <form id="contact-form">
-            <input type="hidden" name="contact_number" value="697483">
-            <label for="user_name">Name</label>
-            <input type="text" id="user_name" name="user_name" required>
-            <label for="user_email">Email</label>
-            <input type="email" id="user_email" name="user_email" required>
-            <label for="message">Message</label>
-            <textarea id="message" name="message" required></textarea>
-            <input type="submit" value="Send Message">
-        </form>
-        <div class="footer">
-            <p>&copy; 2025 Your Company. <a href="#">Privacy Policy</a></p>
-        </div>
-    </div>
 </body>
 </html>
