@@ -10,7 +10,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "nodemailer": "^6.6.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "body-parser": "latest"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
