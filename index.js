@@ -1,48 +1,58 @@
-const express = require("express");
-const nodemailer = require("nodemailer");
-const path = require("path");
+const express = require('express');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// Middleware untuk mengakses file statis (HTML, CSS, JS, dll)
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Middleware untuk meng-handle form data
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// Menyajikan index.html saat diakses di root ("/")
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html")); // pastikan file index.html ada di direktori yang sama dengan server.js
-});
+// Endpoint untuk kirim email
+app.post("/send-email", (req, res) => {
+  const email = req.body.email;
+  const message = req.body.message;
 
-// Endpoint untuk mengirim email
-app.post("/send-email", async (req, res) => {
-  const { email, subject, message } = req.body;
+  if (!email || !message) {
+    return res.status(400).send('Email dan pesan harus diisi!');
+  }
 
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
     auth: {
-      user: "vioobot@gmail.com", // Ganti dengan email pengirim
-      pass: "myzh ntdy xpjs hdmd", // Ganti dengan password atau app password
-    },
+      user: 'vioobot@gmail.com',  // Ganti dengan alamat email Anda
+      pass: 'myzh ntdy xpjs hdmd'  // Ganti dengan password aplikasi Anda
+    }
   });
 
-  let mailOptions = {
-    from: "vioobot@gmail.com", // Ganti dengan email pengirim
-    to: email,
-    subject: subject,
-    text: message,
+  const mailOptions = {
+    from: 'vioobot@gmail.com',
+    to: email,  // Penerima email dari input form
+    subject: 'Pesan dari Bot',
+    text: message,  // Pesan dari input form
+    html: `
+      <h3>Pesan Anda:</h3>
+      <p>${message}</p>
+    `
   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true });
-  } catch (error) {
-    console.error("Error sending email:", error);
-    res.json({ success: false });
-  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+      return res.status(500).send('Gagal mengirim email');
+    }
+    console.log('Email sent: ' + info.response);
+    res.send('Pesan berhasil dikirim ke email Anda!');
+  });
 });
 
-// Menjalankan server pada port yang ditentukan
+// Endpoint untuk menampilkan halaman utama (index.html)
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
+
+// Menjalankan server
 app.listen(port, () => {
-  console.log(`Server berjalan di http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
